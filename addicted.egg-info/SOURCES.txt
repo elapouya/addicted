@@ -1,0 +1,12 @@
+CHANGES.rst
+MANIFEST.in
+README.rst
+setup.py
+addicted/__init__.py
+addicted.egg-info/PKG-INFO
+addicted.egg-info/SOURCES.txt
+addicted.egg-info/dependency_links.txt
+addicted.egg-info/eager_resources.txt
+addicted.egg-info/not-zip-safe
+addicted.egg-info/requires.txt
+addicted.egg-info/top_level.txt

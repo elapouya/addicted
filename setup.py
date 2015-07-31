@@ -24,7 +24,7 @@ News
 """ % read('README', 'CHANGES')
 
 setup(name='addicted',
-      version='0.0.1',
+      version='0.0.2',
       description='addict ExtendeD',
       long_description=long_description,
       classifiers=[

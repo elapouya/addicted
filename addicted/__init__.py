@@ -66,97 +66,73 @@ class DictExt(Dict):
                                 dct[key_prefix + k] = v
         return dct
 
-    def count_items(self,filter):
-        n = 0
-        for v in self.itervalues():
-            try:
-                if filter(v):
-                    n += 1
-            except:
-                pass
-        return n
-
-    def get_items(self,filter):
-        items=[]
-        for k,v in self.iteritems():
-            try:
-                if filter(k,v):
-                    items.append((k, v))
-            except:
-                pass
-        return items
-
-    def get_items_iter(self,filter):
-        for k,v in self.iteritems():
-            try:
-                if filter(k,v):
-                    yield (k, v)
-            except:
-                pass
-            
-    def get_items_key_re(self,pattern):
-        items=[]
-        for k,v in self.iteritems():
-            try:
-                if pattern.match(k):
-                    items.append((k, v))
-            except:
-                pass
-        return items
-
-    def get_items_key_re_iter(self,pattern):
-        for k,v in self.iteritems():
-            try:
-                if pattern.match(k):
-                    yield (k, v)
-            except:
-                pass
-            
-    def get_items_val_re(self,pattern):
-        items=[]
-        for k,v in self.iteritems():
-            try:
-                if pattern.match(v):
-                    items.append((k, v))
-            except:
-                pass
-        return items
-
-    def get_items_val_re_iter(self,pattern):
-        for k,v in self.iteritems():
-            try:
-                if pattern.match(v):
-                    yield (k, v)
-            except:
-                pass
-            
-    def gets(self,*keys):
-        out=[]
-        for k in keys:
-            out.append(self.get(k))
-        # le string formatting veut absolument un tupple...
-        return tuple(out)
-
-    def format_items(self,format_func,default=None):
-        out=''
-        for k,v in sorted(self.items()):
-            out += format_func(k,v)
+    def count_some_values(self,pattern,ignore_case=False):
+        if isinstance(pattern,basestring):
+            pattern = re.compile(pattern, re.I if ignore_case else 0)
+        if callable(pattern):
+            return sum(( 1 if pattern(v) else 0 for v in self.itervalues()))
         else:
-            if default:
-                return default
-        return out
+            return sum(( 1 if pattern.search(str(v)) else 0 for v in self.itervalues()))
+            
+    def count_some_keys(self,pattern,ignore_case=False):
+        if isinstance(pattern,basestring):
+            pattern = re.compile(pattern, re.I if ignore_case else 0)
+        if callable(pattern):
+            return sum(( 1 if pattern(v) else 0 for v in self.iterkeys()))
+        else:
+            return sum(( 1 if pattern.search(str(k)) else 0 for k in self.iterkeys()))
+
+    def count_some_items(self,filter):
+        return sum(( 1 if filter(k,v) else 0 for k,v in self.iteritems()))
+
+    def iter_some_items(self,pattern,ignore_case=False):
+        if isinstance(pattern,basestring):
+            pattern = re.compile(pattern, re.I if ignore_case else 0)
+        if callable(pattern):
+            return ( (k,v) for k,v in self.iteritems() if pattern(k,v) )
+        else:
+            return ( (k,v) for k,v in self.iteritems() if pattern.search(str(k)) )
+
+    def iter_some_values(self,pattern,ignore_case=False):
+        if isinstance(pattern,basestring):
+            pattern = re.compile(pattern, re.I if ignore_case else 0)
+        if callable(pattern):
+            return ( v for v in self.itervalues() if pattern(v) )
+        else:
+            return ( v for v in self.itervalues() if pattern.search(str(v)) )
     
-    def extract(self,key_list):
-        """ Si le dict contient {'a':1,'b':2,'c':3}
-            alors dict.extract(['b','c','d'])
-            renverra {'b':2,'c':3}"""
+    def iter_some_keys(self,pattern,ignore_case=False):
+        if isinstance(pattern,basestring):
+            pattern = re.compile(pattern, re.I if ignore_case else 0)
+        if callable(pattern):
+            return ( k for k in self.iterkeys() if pattern(k) )
+        else:
+            return ( k for k in self.iterkeys() if pattern.search(str(k)) )
+    
+    def get_some_items(self,pattern,ignore_case=False):
+        return list(self.iter_some_items(self,pattern,ignore_case))
+
+    def get_some_values(self,pattern,ignore_case=False):
+        return list(self.iter_some_values(self,pattern,ignore_case))
+    
+    def get_some_keys(self,pattern,ignore_case=False):
+        return list(self.iter_some_keys(self,pattern,ignore_case))                
+            
+    def gets(self,*key_list):
         if isinstance(key_list,basestring):
             key_list = key_list.split(',')
-        out = type(self)({})
-        for k in key_list:
-            if k in self:
-                out[k] = self[k]
-        return out
+        # le string formatting veut absolument un tupple...
+        return tuple([ self[k] for k in key_list ])
+    
+    def extract(self,key_list):
+        """ >>> d = {'a':1,'b':2,'c':3}
+            >>> print d.extract('b,c,d')
+            >>> {'b':2,'c':3}
+            >>> print d.extract(['b','c','d'])
+            >>> {'b':2,'c':3} """
+        if isinstance(key_list,basestring):
+            key_list = key_list.split(',')            
+        return self.__class__([ (k,self[k]) for k in key_list if k in self ])
     
     def parse_booleans(self,key_list):
         if isinstance(key_list,basestring):

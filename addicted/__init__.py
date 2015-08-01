@@ -118,7 +118,7 @@ class DictExt(Dict):
     def get_some_keys(self,pattern,ignore_case=False):
         return list(self.iter_some_keys(self,pattern,ignore_case))                
             
-    def gets(self,*key_list):
+    def mget(self,*key_list):
         if isinstance(key_list,basestring):
             key_list = key_list.split(',')
         # le string formatting veut absolument un tupple...

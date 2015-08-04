@@ -9,14 +9,14 @@ This library comes from ‘mewwts/addict‘ with some more features.
 Dict
 ----
 
-Same as Dict from ‘mewwts/addict‘ except that update() method accept list,tuple and kwargs like usual python dict
+Same as Dict from ‘mewwts/addict‘ except that update() method accept list,tuple and kwargs like usual python dict.
 The use of ‘inspect‘ module has been removed for performance reason.
 
 
 DictExt
 -------
 
-Dict with these additional methods ::
+Dict with these additional methods : ::
 
     pprint()
     find(pattern,**kwargs)

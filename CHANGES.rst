@@ -1,3 +1,9 @@
+0.0.3 (2015-08-04)
+------------------
+mewwts/addict source code has been included directly into elapouya/addicted to remove the use of 'inspect' module for performance reason
+the isgenerator() function has been coded another way.
+update() method has been changed to accept list,tuple and kwargs
+
 0.0.2 (2015-07-31)
 ------------------
 Add some methods

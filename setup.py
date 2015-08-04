@@ -24,7 +24,7 @@ News
 """ % read('README', 'CHANGES')
 
 setup(name='addicted',
-      version='0.0.2',
+      version='0.0.3',
       description='addict ExtendeD',
       long_description=long_description,
       classifiers=[
@@ -39,6 +39,6 @@ setup(name='addicted',
       author_email='elapouya@gmail.com',
       license='LGPL 2.1',
       packages=['addicted'],
-      install_requires = ['addict','noattr'],
+      install_requires = ['noattr'],
       eager_resources = [],
       zip_safe=False)

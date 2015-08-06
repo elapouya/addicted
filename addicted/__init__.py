@@ -5,7 +5,9 @@ Création : 30 juin 2015
 @author: Eric Lapouyade
 '''
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
+
+__all__ = ['Dict', 'DictExt', 'NoAttrDict', 'NoAttr']
 
 from noattr import NoAttr
 import re

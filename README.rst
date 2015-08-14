@@ -13,7 +13,7 @@ Same as Dict from ‘mewwts/addict‘ except that update() method accept list,tu
 The use of ‘inspect‘ module has been removed for performance reason.
 
 
-DictExt
+AddDict
 -------
 
 Dict with these additional methods : ::
@@ -37,15 +37,15 @@ Dict with these additional methods : ::
 NoAttrDict
 ----------
 
-Works like DictExt, except that it returns a ‘NoAttr‘ value when an attribute is missing.
+Works like AddDict, except that it returns a ‘NoAttr‘ value when an attribute is missing.
 Please read `noattr <https://pypi.python.org/pypi/noattr/>`_ package notes for explaination about ‘NoAttr‘ ::
 
     from addicted import Dict,NoAttrDict
-    d1 = DictExt()
+    d1 = AddDict()
     d2 = NoAttrDict()
 
     print type(d1.a.b.c.d)
-    >>> <class 'addicted.DictExt'>
+    >>> <class 'addicted.AddDict'>
 
     print type(d2.a.b.c.d)
     >>> <class 'noattr.NoAttrType'>

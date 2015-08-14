@@ -7,7 +7,7 @@ Création : 30 juin 2015
 
 __version__ = '0.0.4'
 
-__all__ = ['Dict', 'DictExt', 'NoAttrDict', 'NoAttr']
+__all__ = ['Dict', 'AddDict', 'NoAttrDict', 'NoAttr']
 
 from noattr import NoAttr
 import re
@@ -264,13 +264,13 @@ class Dict(dict):
             self._update_kv(k, v)
 
 
-class DictExt(Dict):
+class AddDict(Dict):
     @property
     def pprint(self):
         pp.pprint(self)
 
     def find(self,pattern,**kwargs):
-        dct=DictExt()
+        dct=AddDict()
         key_prefix = kwargs.get('key_prefix','')
         deep = kwargs.get('deep',True)
         if key_prefix:
@@ -287,7 +287,7 @@ class DictExt(Dict):
                 if m :
                     dct[key_prefix + k] = v
                     continue
-            if isinstance(v,DictExt):
+            if isinstance(v,AddDict):
                 if deep:
                     kwargs['key_prefix'] = key_prefix + k
                     kwargs['parent_dict'] = v
@@ -297,7 +297,7 @@ class DictExt(Dict):
                     n = 0
                     for i in v:
                         n += 1
-                        if isinstance(i,DictExt):
+                        if isinstance(i,AddDict):
                             kwargs['key_prefix'] = '%s%d' % (key_prefix, n)
                             kwargs['parent_dict'] = i
                             dct.update(i.find(pattern,**kwargs))
@@ -408,7 +408,7 @@ class DictExt(Dict):
                     except ValueError:
                         self[k] = None
 
-class NoAttrDict(DictExt):
+class NoAttrDict(AddDict):
     def __getitem__(self, name):
         if name not in self:
             return NoAttr

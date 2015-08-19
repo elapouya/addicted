@@ -382,7 +382,16 @@ class AddDict(Dict):
             >>> {'b':2,'c':3} """
         if isinstance(key_list,basestring):
             key_list = key_list.split(',')
-        return self.__class__([ (k,self[k]) for k in key_list if k in self ])
+        return type(self)([ (k,self[k]) for k in key_list if k in self ])
+
+    def exclude(self,key_list):
+        """ >>> d = {'a':1,'b':2,'c':3}
+            >>> print d.exclude('b,c,d')
+            >>> {'a':1} """
+        if isinstance(key_list,basestring):
+            key_list = key_list.split(',')
+        return type(self)([ (k,self[k]) for k in self if k not in key_list ])
+
 
     def parse_booleans(self,key_list):
         if isinstance(key_list,basestring):

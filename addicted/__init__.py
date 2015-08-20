@@ -374,7 +374,7 @@ class AddDict(Dict):
         # le string formatting veut absolument un tupple...
         return tuple([ self[k] for k in key_list ])
 
-    def extract(self,key_list):
+    def extract_keys(self,key_list):
         """ >>> d = {'a':1,'b':2,'c':3}
             >>> print d.extract('b,c,d')
             >>> {'b':2,'c':3}
@@ -384,7 +384,7 @@ class AddDict(Dict):
             key_list = key_list.split(',')
         return type(self)([ (k,self[k]) for k in key_list if k in self ])
 
-    def exclude(self,key_list):
+    def exclude_keys(self,key_list):
         """ >>> d = {'a':1,'b':2,'c':3}
             >>> print d.exclude('b,c,d')
             >>> {'a':1} """

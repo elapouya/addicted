@@ -387,6 +387,9 @@ class AddDict(Dict):
     def exclude_keys(self,key_list):
         """ >>> d = {'a':1,'b':2,'c':3}
             >>> print d.exclude('b,c,d')
+            >>> {'a':1}
+            >>> d = {'a':1,'b':2,'c':3}
+            >>> print d.exclude(['b','c','d'])
             >>> {'a':1} """
         if isinstance(key_list,basestring):
             key_list = key_list.split(',')

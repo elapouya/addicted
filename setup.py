@@ -1,5 +1,6 @@
 from setuptools import setup
 import os
+import re
 
 def read(*names):
     values = dict()
@@ -23,17 +24,25 @@ News
 %(CHANGES)s
 """ % read('README', 'CHANGES')
 
+def get_version(pkg):
+    path = os.path.join(os.path.dirname(__file__),pkg,'__init__.py')
+    with open(path) as fh:
+        m = re.search(r'^__version__\s*=\s*[\'"]([^\'"]+)[\'"]',fh.read(),re.M)
+    if m:
+        return m.group(1)
+    raise RuntimeError("Unable to find __version__ string in %s." % path)
+
 setup(name='addicted',
-      version='0.0.4',
+      version=get_version('addicted'),
       description='addict ExtendeD',
       long_description=long_description,
       classifiers=[
           "Intended Audience :: Developers",
-          "Development Status :: 2 - Pre-Alpha",
+          "Development Status :: 4 - Beta",
           "Programming Language :: Python :: 2",
           "Programming Language :: Python :: 2.7",
       ],
-      keywords='attribute, AttrDict, addict',
+      keywords='attribute AttrDict addict addicted textops naghelp',
       url='https://github.com/elapouya/addicted',
       author='Eric Lapouyade',
       author_email='elapouya@gmail.com',

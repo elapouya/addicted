@@ -33,6 +33,7 @@ Dict with these additional methods : ::
     extract(key_list)
     parse_booleans(key_list)
     parse_numbers(key_list)
+    update_recursive(*args, **kwargs)
 
 NoAttrDict
 ----------

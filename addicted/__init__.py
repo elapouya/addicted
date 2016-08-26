@@ -5,7 +5,7 @@ Création : 30 juin 2015
 @author: Eric Lapouyade
 '''
 
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 
 __all__ = ['Dict', 'AddDict', 'NoAttrDict', 'NoAttr']
 
@@ -38,10 +38,10 @@ class Dict(dict):
     my_Dict.a.b.d = [4, 5, 6]
     instead.
 
-    update_recursive() method will *recursively* update nested dict:
+    update() method will *recursively* update nested dict:
 
     >>> d=Dict({'a':{'b':{'c':3,'d':4},'h':4}})
-    >>> d.update_recursive({'a':{'b':{'c':'888'}}})
+    >>> d.update({'a':{'b':{'c':'888'}}})
     >>> d
     {'a': {'b': {'c': '888', 'd': 4}, 'h': 4}}
 
@@ -51,10 +51,6 @@ class Dict(dict):
     >>> d.update({'a':{'b':{'c':'888'}}})
     >>> d
     {'a': {'b': {'c': '888'}}}
-
-    But hey, you can always use the same syntax as a regular dict,
-    however, this will not raise TypeErrors or AttributeErrors at any time
-    while you try to get an item. A lot like a defaultdict.
     """
 
     def __init__(self, *args, **kwargs):
@@ -253,19 +249,19 @@ class Dict(dict):
             y[copy.deepcopy(key, memo)] = copy.deepcopy(value, memo)
         return y
 
-    def _update_recursive_kv(self,k,v):
+    def _update_kv(self,k,v):
         if ((k not in self) or
             (not isinstance(self[k], dict)) or
             (not isinstance(v, dict))):
             self[k] = v
         else:
-            self[k].update_recursive(v)
+            self[k].update(v)
 
-    def update_recursive(self, *args, **kwargs):
+    def update(self, *args, **kwargs):
         """ update() method will *recursively* update nested dict:
 
             >>> d=Dict({'a':{'b':{'c':3,'d':4},'h':4}})
-            >>> d.update_recursive({'a':{'b':{'c':'888'}}})
+            >>> d.update({'a':{'b':{'c':'888'}}})
             >>> d
             {'a': {'b': {'c': '888', 'd': 4}, 'h': 4}}
 
@@ -276,20 +272,24 @@ class Dict(dict):
                 continue
             elif isinstance(arg, dict):
                 for k, v in arg.items():
-                    self._update_recursive_kv(k, v)
+                    self._update_kv(k, v)
             elif isinstance(arg, (list, tuple)) and (not isinstance(arg[0], (list, tuple))):
                 k = arg[0]
                 v = arg[1]
-                self._update_recursive_kv(k, v)
+                self._update_kv(k, v)
             elif isinstance(arg, (list, tuple)) or isgenerator(arg):
                 for k, v in arg:
-                    self._update_recursive_kv(k, v)
+                    self._update_kv(k, v)
             else:
                 raise TypeError("update does not understand "
                                 "{0} types".format(type(arg)))
 
         for k, v in kwargs.items():
-            self._update_recursive_kv(k, v)
+            self._update_kv(k, v)
+
+    def update_dict(self,*args, **kwargs):
+        """ not recursive update() function """
+        super(Dict, self).update(*args, **kwargs)
 
 class AddDict(Dict):
     @property
@@ -318,7 +318,7 @@ class AddDict(Dict):
                 if deep:
                     kwargs['key_prefix'] = key_prefix + k
                     kwargs['parent_dict'] = v
-                    dct.update_recursive(v.find(pattern,**kwargs))
+                    dct.update(v.find(pattern,**kwargs))
             elif type(v) == list:
                 if deep:
                     n = 0
@@ -327,7 +327,7 @@ class AddDict(Dict):
                         if isinstance(i,AddDict):
                             kwargs['key_prefix'] = '%s%d' % (key_prefix, n)
                             kwargs['parent_dict'] = i
-                            dct.update_recursive(i.find(pattern,**kwargs))
+                            dct.update(i.find(pattern,**kwargs))
             else:
                 if search_values:
                     if (not look_key) or (look_key == k) :

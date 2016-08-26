@@ -1,6 +1,6 @@
-0.0.7 (2016-08-26)
+0.0.8 (2016-08-26)
 ------------------
-change update() to update_recursive()
+add update_dict() for not recursive update()
 
 0.0.6 (2015-08-06)
 ------------------

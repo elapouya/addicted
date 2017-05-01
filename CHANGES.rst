@@ -1,3 +1,7 @@
+0.0.9 (2017-05-01)
+------------------
+switch from pprint property to pprint() method, add pformat()
+
 0.0.8 (2016-08-26)
 ------------------
 add update_dict() for not recursive update()

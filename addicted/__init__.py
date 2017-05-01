@@ -5,7 +5,7 @@ Création : 30 juin 2015
 @author: Eric Lapouyade
 '''
 
-__version__ = '0.0.8'
+__version__ = '0.0.9'
 
 __all__ = ['Dict', 'AddDict', 'NoAttrDict', 'NoAttr']
 
@@ -292,9 +292,11 @@ class Dict(dict):
         super(Dict, self).update(*args, **kwargs)
 
 class AddDict(Dict):
-    @property
     def pprint(self):
         pp.pprint(self)
+
+    def pformat(self):
+        return pp.pformat(self)
 
     def find(self,pattern,**kwargs):
         dct=AddDict()
